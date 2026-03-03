@@ -22,6 +22,9 @@ class LLMConfig:
 
 
 def build_chat_model(config: LLMConfig) -> BaseChatModel:
+    http_client = httpx.Client(verify=config.verify_ssl)
+    http_async_client = httpx.AsyncClient(verify=config.verify_ssl)
+
     if config.provider == "gemini":
         return ChatGoogleGenerativeAI(
             model=config.model,
@@ -34,7 +37,8 @@ def build_chat_model(config: LLMConfig) -> BaseChatModel:
             model=config.model,
             api_key=config.api_key,
             temperature=config.temperature,
-            http_client=httpx.Client(verify=config.verify_ssl),
+            http_client=http_client,
+            http_async_client=http_async_client,
         )
 
     if config.provider == "local_openai_compatible":
@@ -43,7 +47,8 @@ def build_chat_model(config: LLMConfig) -> BaseChatModel:
             api_key=config.api_key or "local",
             base_url=config.base_url,
             temperature=config.temperature,
-            http_client=httpx.Client(verify=config.verify_ssl),
+            http_client=http_client,
+            http_async_client=http_async_client,
         )
 
     raise ValueError(f"Unsupported provider: {config.provider}")

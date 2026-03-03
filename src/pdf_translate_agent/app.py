@@ -129,7 +129,7 @@ def build_ui() -> gr.Blocks:
 
 def main() -> None:
     demo = build_ui()
-    demo.launch(server_name="127.0.0.1", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860)
 
 
 if __name__ == "__main__":
