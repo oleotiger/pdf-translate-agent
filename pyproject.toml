@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf-translate-agent"
+version = "0.1.0"
+description = "Local Windows-friendly AI agent for downloading and translating papers"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Codex Agent"}]
+dependencies = [
+  "gradio>=4.44.0",
+  "langchain>=0.3.0",
+  "langchain-openai>=0.2.0",
+  "langchain-google-genai>=2.0.0",
+  "langchain-community>=0.3.0",
+  "pymupdf>=1.24.0",
+  "pypdf>=4.2.0",
+  "requests>=2.32.0",
+  "arxiv>=2.1.0",
+  "markdown>=3.6",
+  "xhtml2pdf>=0.2.16",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
