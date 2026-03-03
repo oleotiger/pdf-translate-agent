@@ -36,6 +36,8 @@ python -m pdf_translate_agent.app
 
 打开浏览器访问 `http://127.0.0.1:7860`。
 
+如果你遇到 OpenAI / OpenAI 兼容接口的 SSL 证书校验错误，可在界面勾选“禁用 SSL 证书校验（不安全，仅用于排障）”。
+
 ## Prompt 设计说明
 
 本项目内置两个 prompt：

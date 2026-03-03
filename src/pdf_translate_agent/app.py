@@ -18,13 +18,24 @@ MODEL_HINTS = {
 }
 
 
-def run_agent(provider, model, api_key, base_url, temperature, pdf_file, link_or_title, output_format):
+def run_agent(
+    provider,
+    model,
+    api_key,
+    base_url,
+    temperature,
+    disable_ssl_verify,
+    pdf_file,
+    link_or_title,
+    output_format,
+):
     cfg = LLMConfig(
         provider=provider,
         model=model,
         api_key=api_key,
         base_url=base_url or None,
         temperature=temperature,
+        verify_ssl=not disable_ssl_verify,
     )
 
     record = AGENT.run(
@@ -72,6 +83,10 @@ def build_ui() -> gr.Blocks:
 
         api_key = gr.Textbox(label="API Key", type="password")
         base_url = gr.Textbox(label="Base URL（本地模型或代理服务可填）", placeholder="http://localhost:8000/v1")
+        disable_ssl_verify = gr.Checkbox(
+            label="禁用 SSL 证书校验（不安全，仅用于排障）",
+            value=False,
+        )
 
         with gr.Row():
             pdf_file = gr.File(label="上传论文 PDF（可选）", file_types=[".pdf"], type="filepath")
@@ -95,7 +110,17 @@ def build_ui() -> gr.Blocks:
         provider.change(update_model_hint, inputs=[provider], outputs=[model])
         run_btn.click(
             run_agent,
-            inputs=[provider, model, api_key, base_url, temperature, pdf_file, link_or_title, output_format],
+            inputs=[
+                provider,
+                model,
+                api_key,
+                base_url,
+                temperature,
+                disable_ssl_verify,
+                pdf_file,
+                link_or_title,
+                output_format,
+            ],
             outputs=[paper_title, source_pdf, md_path, pdf_path, md_preview, summary, history],
         )
 
