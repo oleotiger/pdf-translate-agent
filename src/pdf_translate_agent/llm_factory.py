@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
+import httpx
 from langchain_core.language_models import BaseChatModel
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
@@ -17,6 +18,7 @@ class LLMConfig:
     api_key: str
     base_url: str | None = None
     temperature: float = 0.1
+    verify_ssl: bool = True
 
 
 def build_chat_model(config: LLMConfig) -> BaseChatModel:
@@ -32,6 +34,7 @@ def build_chat_model(config: LLMConfig) -> BaseChatModel:
             model=config.model,
             api_key=config.api_key,
             temperature=config.temperature,
+            http_client=httpx.Client(verify=config.verify_ssl),
         )
 
     if config.provider == "local_openai_compatible":
@@ -40,6 +43,7 @@ def build_chat_model(config: LLMConfig) -> BaseChatModel:
             api_key=config.api_key or "local",
             base_url=config.base_url,
             temperature=config.temperature,
+            http_client=httpx.Client(verify=config.verify_ssl),
         )
 
     raise ValueError(f"Unsupported provider: {config.provider}")
